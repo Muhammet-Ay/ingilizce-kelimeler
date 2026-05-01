@@ -92,7 +92,7 @@ No API keys. No `pip install`. Just Python 3.8+ and an internet connection.
 ### 1. Clone or download
 
 ```bash
-git clone https://github.com/<your-user>/ingilizce-kelimeler.git
+git clone https://github.com/Muhammet-Ay/ingilizce-kelimeler.git
 cd ingilizce-kelimeler
 ```
 
@@ -197,4 +197,4 @@ MIT — do what you want, just keep the copyright notice.
 - [Tatoeba](https://tatoeba.org) — community-built corpus of translated sentences
 - [Obsidian](https://obsidian.md) — the knowledge base this all plugs into
 
-Built by [Muhammet Ay](https://github.com/<your-user>) while learning English the hard way.
+Built by [Muhammet Ay](https://github.com/Muhammet-Ay) while learning English the hard way.

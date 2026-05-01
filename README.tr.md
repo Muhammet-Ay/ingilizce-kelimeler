@@ -45,7 +45,7 @@ API anahtarı yok. `pip install` yok. Sadece Python 3.8+ ve internet bağlantıs
 ### 1. İndir
 
 ```bash
-git clone https://github.com/<kullanici-adin>/ingilizce-kelimeler.git
+git clone https://github.com/Muhammet-Ay/ingilizce-kelimeler.git
 cd ingilizce-kelimeler
 ```
 
@@ -150,4 +150,4 @@ MIT — istediğini yap, sadece copyright satırını koru.
 - [Tatoeba](https://tatoeba.org) — topluluk-yapımı çift dilli cümle veritabanı
 - [Obsidian](https://obsidian.md) — bütün bunların oturduğu bilgi tabanı
 
-Yapan: [Muhammet Ay](https://github.com/<kullanici-adin>) — İngilizce'yi zor yoldan öğrenirken.
+Yapan: [Muhammet Ay](https://github.com/Muhammet-Ay) — İngilizce'yi zor yoldan öğrenirken.
