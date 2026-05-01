@@ -1,0 +1,13 @@
+# Buraya satır satır İngilizce kelime yaz, sonra:
+#   python kelime_ekle.py
+# komutunu çalıştır. Script dictionaryapi.dev'den IPA, tür,
+# tanım, örnek cümle, eş/zıt anlamlı çeker; MyMemory'den
+# Türkçe çevirisini alır ve ../Kelimeler/<kelime>.md olarak kaydeder.
+#
+# # ile başlayan satırlar yorum kabul edilir, atlanır.
+# Boş satırlar da atlanır.
+#
+# Örnekler (denemek için # işaretini kaldır):
+# endeavor
+# ubiquitous
+# meticulous

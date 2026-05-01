@@ -1,0 +1,36 @@
+# Obsidian — kişisel ayarlar/durum
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/plugins/*/data.json
+.obsidian/plugins/obsidian-spaced-repetition/data.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Kullanıcının kendi kelime listesi (boş şablon yeter)
+Araçlar/yeni_kelimeler.txt.local
+Araçlar/kelimeler.csv
+
+# Excalidraw drawings (genelde kişisel)
+Kelimeler/*.excalidraw.md
+
+# Ayarlar / kişisel data
+*.local
+*.private

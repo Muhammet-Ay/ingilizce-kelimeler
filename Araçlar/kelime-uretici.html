@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Obsidian Kelime Üretici</title>
+<style>
+  :root {
+    --bg: #1e1e2e;
+    --panel: #282838;
+    --panel-2: #1a1a26;
+    --text: #e6e6f0;
+    --muted: #9999b3;
+    --accent: #b48ead;
+    --accent-2: #88c0d0;
+    --good: #a3be8c;
+    --border: #3a3a4d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    line-height: 1.5;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+  h1 { margin: 0 0 4px; font-size: 1.6rem; }
+  .subtitle { color: var(--muted); margin: 0 0 24px; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 12px 0 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  input, textarea, select {
+    width: 100%;
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 11px;
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 60px; }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+  .level-tabs {
+    display: flex; gap: 6px; margin: 8px 0 14px;
+  }
+  .level-tabs button {
+    flex: 1;
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .level-tabs button.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .actions {
+    display: flex; gap: 10px; margin-top: 16px;
+  }
+  .btn {
+    background: var(--accent-2);
+    color: var(--bg);
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .btn.secondary {
+    background: var(--panel-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn.success {
+    background: var(--good);
+    color: var(--bg);
+  }
+  .btn:hover { filter: brightness(1.08); }
+  pre.output {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: "Fira Code", Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    max-height: 520px;
+    overflow: auto;
+  }
+  .filename {
+    font-family: "Fira Code", Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin: 8px 0 14px;
+    padding: 8px 12px;
+    background: var(--panel-2);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .hint {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .copied {
+    color: var(--good);
+    font-size: 0.85rem;
+    margin-left: 8px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .copied.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📝 Obsidian Kelime Üretici</h1>
+  <p class="subtitle">Forma yaz → Markdown üret → Obsidian'a yapıştır.</p>
+
+  <div class="grid">
+    <!-- LEFT: form -->
+    <div class="panel">
+      <label>Şablon seviyesi</label>
+      <div class="level-tabs">
+        <button data-level="basit" class="active">Basit</button>
+        <button data-level="orta">Orta</button>
+        <button data-level="detayli">Detaylı</button>
+      </div>
+
+      <label>Kelime *</label>
+      <input id="kelime" placeholder="appreciate" />
+
+      <label>Anlam (Türkçe) *</label>
+      <input id="anlam" placeholder="takdir etmek, kıymetini bilmek" />
+
+      <label>Örnek cümle</label>
+      <textarea id="ornek" placeholder="I really appreciate your help."></textarea>
+
+      <!-- ORTA + DETAYLI -->
+      <div class="orta detayli">
+        <div class="row">
+          <div>
+            <label>Telaffuz (IPA)</label>
+            <input id="ipa" placeholder="əˈpriːʃieɪt" />
+          </div>
+          <div>
+            <label>Tür</label>
+            <select id="pos">
+              <option value="">— seç —</option>
+              <option>verb</option>
+              <option>noun</option>
+              <option>adjective</option>
+              <option>adverb</option>
+              <option>phrase</option>
+            </select>
+          </div>
+        </div>
+
+        <label>İngilizce tanım</label>
+        <input id="endef" placeholder="to recognize the value of something" />
+
+        <div class="row">
+          <div>
+            <label>Eş anlamlı</label>
+            <input id="syn" placeholder="value, recognize" />
+          </div>
+          <div>
+            <label>Zıt anlamlı</label>
+            <input id="ant" placeholder="undervalue" />
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAYLI -->
+      <div class="detayli">
+        <label>Kategori</label>
+        <input id="kategori" placeholder="business / daily / academic" />
+
+        <label>Sık kullanım (1–5)</label>
+        <input id="freq" type="number" min="1" max="5" placeholder="4" />
+
+        <label>Görsel ipucu</label>
+        <input id="visual" placeholder="resilient → bambu (eğilir, kırılmaz)" />
+
+        <label>Notlar</label>
+        <textarea id="notlar" placeholder="Bu kelimeyi nerede gördüm? Neden ekledim?"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="generate">Markdown Üret</button>
+        <button class="btn secondary" id="reset">Temizle</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: output -->
+    <div class="panel">
+      <label>Dosya adı (Obsidian'da yeni notun adı)</label>
+      <div class="filename" id="filename">—</div>
+
+      <label style="margin-top:0">Üretilen Markdown
+        <span class="copied" id="copied">✓ Kopyalandı</span>
+      </label>
+      <pre class="output" id="output">Sol formu doldur, "Markdown Üret"e bas.</pre>
+
+      <div class="actions">
+        <button class="btn success" id="copy">📋 Kopyala</button>
+        <button class="btn secondary" id="download">💾 .md indir</button>
+      </div>
+      <p class="hint">Kopyaladıktan sonra Obsidian'da <b>Kelimeler/</b> altına yeni not aç (dosya adını yukarıdaki gibi yap), içine yapıştır.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  let level = "basit";
+
+  document.querySelectorAll(".level-tabs button").forEach(b => {
+    b.addEventListener("click", () => {
+      document.querySelectorAll(".level-tabs button").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      level = b.dataset.level;
+      applyLevelVisibility();
+    });
+  });
+
+  function applyLevelVisibility() {
+    document.querySelectorAll(".orta").forEach(el => el.style.display = (level === "orta" || level === "detayli") ? "" : "none");
+    document.querySelectorAll(".detayli").forEach(el => el.style.display = (level === "detayli") ? "" : "none");
+  }
+  applyLevelVisibility();
+
+  function todayISO() {
+    const d = new Date();
+    return d.toISOString().slice(0, 10);
+  }
+
+  function slug(s) {
+    return s.trim().toLowerCase().replace(/[^a-z0-9\-_ ]/g, "").replace(/\s+/g, "-");
+  }
+
+  function buildBasit({kelime, anlam, ornek}) {
+    return `---
+tags: [vocabulary, beginner]
+created: ${todayISO()}
+level: beginner
+category:
+---
+
+# ${kelime}
+
+**Anlam:** ${anlam}
+
+**Örnek:** ${ornek || "_(örnek cümle ekle)_"}
+
+---
+
+## 🔁 Spaced Repetition
+
+#flashcards/english
+
+${kelime}::${anlam}
+`;
+  }
+
+  function buildOrta(d) {
+    return `---
+tags: [vocabulary, intermediate]
+created: ${todayISO()}
+level: intermediate
+category:
+part_of_speech: ${d.pos || ""}
+---
+
+# ${d.kelime}
+
+> **Telaffuz:** /${d.ipa || "..."}/
+> **Tür:** ${d.pos || "—"}
+
+## 📖 Anlam
+
+${d.anlam}
+
+**İngilizce tanım:** ${d.endef || "_(ekle)_"}
+
+## 💬 Örnek Cümleler
+
+1. ${d.ornek || "_(örnek 1)_"}
+2. _(örnek 2)_
+3. _(kendi cümlen)_
+
+## 🔗 İlgili Kelimeler
+
+- **Eş anlamlı:** ${d.syn || "_—_"}
+- **Zıt anlamlı:** ${d.ant || "_—_"}
+
+---
+
+## 🔁 Spaced Repetition
+
+#flashcards/english
+
+${d.kelime}::${d.anlam}<br>**Örnek:** ${d.ornek || ""}
+`;
+  }
+
+  function buildDetayli(d) {
+    const stars = "⭐".repeat(Math.max(0, Math.min(5, parseInt(d.freq) || 0))) || "☆";
+    return `---
+tags: [vocabulary, advanced]
+created: ${todayISO()}
+level: advanced
+category: ${d.kategori || ""}
+part_of_speech: ${d.pos || ""}
+frequency: ${d.freq || ""}
+---
+
+# ${d.kelime}
+
+> **Telaffuz:** /${d.ipa || "..."}/ 🔊
+> **Tür:** ${d.pos || "—"}
+> **Sık kullanım:** ${stars}
+
+---
+
+## 📖 Anlam
+
+### Türkçe
+${d.anlam}
+
+### İngilizce
+${d.endef || "_(ekle)_"}
+
+---
+
+## 💬 Örnek Cümleler
+
+1. ${d.ornek || "_(resmi)_"}
+2. _(günlük)_
+3. _(edebi/yazılı)_
+
+### Kendi cümlem
+- _(kendi cümlen — hatırlamayı 3x artırır)_
+
+---
+
+## 🔗 İlişkiler
+
+| Tür | Kelime |
+|---|---|
+| Eş anlamlı | ${d.syn || "—"} |
+| Zıt anlamlı | ${d.ant || "—"} |
+| Kelime ailesi | _(noun / verb / adj formları)_ |
+
+---
+
+## 🖼️ Görsel İpucu
+
+${d.visual || "_(görsel bağlantı)_"}
+
+---
+
+## 📝 Notlar
+
+${d.notlar || "_(bu kelimeyi nerede gördün?)_"}
+
+---
+
+## 🔁 Spaced Repetition
+
+#flashcards/english
+
+${d.kelime}::${d.anlam}<br>**Tanım:** ${d.endef || ""}<br>**Örnek:** ${d.ornek || ""}
+`;
+  }
+
+  function generate() {
+    const data = {
+      kelime: $("kelime").value.trim(),
+      anlam: $("anlam").value.trim(),
+      ornek: $("ornek").value.trim(),
+      ipa: $("ipa").value.trim(),
+      pos: $("pos").value.trim(),
+      endef: $("endef").value.trim(),
+      syn: $("syn").value.trim(),
+      ant: $("ant").value.trim(),
+      kategori: $("kategori").value.trim(),
+      freq: $("freq").value.trim(),
+      visual: $("visual").value.trim(),
+      notlar: $("notlar").value.trim(),
+    };
+    if (!data.kelime || !data.anlam) {
+      alert("Kelime ve anlam zorunlu.");
+      return;
+    }
+    let md = "";
+    if (level === "basit") md = buildBasit(data);
+    else if (level === "orta") md = buildOrta(data);
+    else md = buildDetayli(data);
+
+    $("output").textContent = md;
+    $("filename").textContent = slug(data.kelime) + ".md";
+  }
+
+  $("generate").addEventListener("click", generate);
+  $("reset").addEventListener("click", () => {
+    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+    $("pos").value = "";
+    $("output").textContent = 'Sol formu doldur, "Markdown Üret"e bas.';
+    $("filename").textContent = "—";
+  });
+
+  $("copy").addEventListener("click", async () => {
+    const text = $("output").textContent;
+    if (!text || text.startsWith("Sol formu")) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      const c = $("copied");
+      c.classList.add("show");
+      setTimeout(() => c.classList.remove("show"), 1500);
+    } catch (e) {
+      // fallback
+      const t = document.createElement("textarea");
+      t.value = text; document.body.appendChild(t);
+      t.select(); document.execCommand("copy");
+      document.body.removeChild(t);
+      const c = $("copied"); c.classList.add("show");
+      setTimeout(() => c.classList.remove("show"), 1500);
+    }
+  });
+
+  $("download").addEventListener("click", () => {
+    const text = $("output").textContent;
+    if (!text || text.startsWith("Sol formu")) return;
+    const name = $("filename").textContent || "kelime.md";
+    const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = name;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Enter on first inputs jumps to generate
+  document.querySelectorAll("input").forEach(i => {
+    i.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        generate();
+      }
+    });
+  });
+</script>
+</body>
+</html>
