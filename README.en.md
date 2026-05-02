@@ -69,6 +69,21 @@ python vault_alfabetik_organize.py --uygula
 
 (`--uygula` means "apply" in Turkish — without it, the script does a dry-run.)
 
+## 🐳 Docker (no Python install required)
+
+```bash
+# Build once (~30 seconds)
+docker build -t ingilizce-kelimeler .
+
+# Run
+docker compose run --rm kelime resilient
+docker compose run --rm kelime endeavor ubiquitous --seviye advanced
+```
+
+Output appears at `Kelimeler/R/resilient.md` on your host machine. Full guide: [docs/DOCKER.md](docs/DOCKER.md).
+
+---
+
 ## Quick start
 
 ### 1. Clone or download

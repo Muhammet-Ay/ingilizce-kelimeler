@@ -1,0 +1,41 @@
+# Image küçük kalsın — sadece script lazım
+
+# Markdown / docs
+*.md
+docs/
+Templates/
+Kelimeler/
+CONTRIBUTING.md
+PUBLISH.md
+
+# Git
+.git/
+.gitignore
+
+# Diğer Python araçları (image'da gerekmiyor)
+Araçlar/toplu_ekleme.py
+Araçlar/vault_temizle.py
+Araçlar/vault_alfabetik_organize.py
+Araçlar/eklentileri_kur.ps1
+Araçlar/eklentileri_kur.bat
+Araçlar/kelime-uretici.html
+Araçlar/kelimeler.csv
+Araçlar/kelimeler_ornek.csv
+Araçlar/README*
+
+# Build artifacts
+__pycache__/
+*.pyc
+
+# Wrapper scripts (host'ta çalışacak, container'da değil)
+Araçlar/kelime-docker.cmd
+Araçlar/kelime-docker.sh
+
+# Docker'ın kendisi
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# OS
+.DS_Store
+Thumbs.db

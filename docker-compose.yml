@@ -1,0 +1,27 @@
+# docker-compose.yml — kolay kullanım
+#
+# Build:
+#   docker compose build
+#
+# Tek kelime:
+#   docker compose run --rm kelime resilient
+#
+# Birden fazla kelime:
+#   docker compose run --rm kelime endeavor ubiquitous meticulous
+#
+# yeni_kelimeler.txt'den toplu (önce dosyayı düzenle):
+#   docker compose run --rm kelime
+#
+# Override seçenekler:
+#   docker compose run --rm kelime validation --seviye advanced
+
+services:
+  kelime:
+    build: .
+    image: ingilizce-kelimeler
+    container_name: ingilizce-kelimeler
+    volumes:
+      # Çıktı: host'taki ./Kelimeler ↔ container'daki /app/Kelimeler
+      - ./Kelimeler:/app/Kelimeler
+      # Toplu kelime listesi (opsiyonel)
+      - ./Araçlar/yeni_kelimeler.txt:/app/yeni_kelimeler.txt:ro
