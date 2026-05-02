@@ -1,200 +1,184 @@
-# Ingilizce-Kelimeler — Auto-Generated English Vocabulary Cards for Obsidian
+# Ingilizce-Kelimeler — Obsidian için Otomatik İngilizce Kelime Kartları
 
-> An [Obsidian](https://obsidian.md) vault that builds English vocabulary cards automatically. You type a word, a Python script fetches the IPA, part of speech, definition, example sentences, synonyms, and **Turkish translations** — then writes a polished markdown note ready for spaced repetition review.
+> [Obsidian](https://obsidian.md) tabanlı bir İngilizce kelime öğrenme sistemi. Sen sadece kelimeyi yazıyorsun, bir Python scripti internetten IPA, tür, tanım, örnek cümle, eş/zıt anlamlıları ve **Türkçe çevirileri** çekip Obsidian'a tertemiz bir kelime kartı yazıyor — spaced repetition ile tekrar etmeye hazır.
 
-🇹🇷 **[Türkçe README burada](README.tr.md)**
+🇬🇧 **[Read in English](README.en.md)**
 
 ![demo](docs/demo.gif)
 
-> *(Replace this GIF with your own — see [docs/RECORDING.md](docs/RECORDING.md) for a 5-minute recording guide.)*
+> *(Bu GIF'i kendin kaydedip değiştir — [docs/RECORDING.md](docs/RECORDING.md) içinde 5 dakikalık rehber var.)*
 
 ---
 
-## Why this exists
+## Niye yaptım
 
-Most vocabulary apps give you flashcards. Few of them do all of these at once:
+Piyasada bir sürü flashcard uygulaması var ama şu özellikleri bir arada bulamadım:
 
-- Pull data from real dictionary sources (not hand-typed)
-- Add Turkish translations automatically (or any second language with one config change)
-- Live inside Obsidian so the notes are yours forever
-- Work entirely with free, no-key APIs
-- Take ~2 seconds per word
+- Gerçek sözlüklerden veri çeken (elden yazmıyorsun)
+- Türkçe çevirileri otomatik ekleyen
+- Notlar Obsidian'da yaşıyor — verin senin
+- Tamamen ücretsiz, API anahtarı gerektirmeyen
+- Kelime başına ~2 saniye
 
-This is what I use myself. If it helps you too, that's the bonus.
+Kendim için yaptım. Sana da yarar dokunursa bonus.
 
-## What it does
+## Nasıl çalışıyor
 
-You run:
+cmd'de yazıyorsun:
 
 ```bash
 python kelime_ekle.py resilient
 ```
 
-You get a fully populated `resilient.md` in your Obsidian vault:
+Obsidian vault'una `Kelimeler/R/resilient.md` notu otomatik düşüyor. İçinde IPA, tür, Türkçe + İngilizce anlam, iki örnek cümle (her biri için Türkçe çeviri), eş/zıt anlamlılar, Spaced Repetition kartı — hepsi dolu.
 
-```markdown
----
-tags: [vocabulary, intermediate]
-created: 2026-04-29
-level: intermediate
-part_of_speech: adjective
-auto_generated: true
----
+3 ücretsiz API kullanıyor:
 
-# resilient
+1. **[dictionaryapi.dev](https://dictionaryapi.dev)** — IPA, tür, tanım, örnek, eş/zıt anlamlı (Wiktionary tabanlı)
+2. **[MyMemory](https://mymemory.translated.net)** — Türkçe çeviri (kelime + örnek cümleler)
+3. **[Tatoeba.org](https://tatoeba.org)** — sözlükte örnek yoksa devreye giriyor; üstelik Türkçe çevirisi insan-yapımı olarak geliyor
 
-> **Pronunciation:** /rɪˈzɪliənt/ 🔊
-> **Type:** adjective
+API anahtarı yok. `pip install` yok. Sadece Python 3.8+ ve internet bağlantısı.
 
-## Meaning
+## Sözlük gibi alfabetik organize
 
-### Turkish
-dirençli, çabuk toparlanan
+Kelimeler basit bir liste değil — **klasik sözlük gibi A-Z gruplanmış**:
 
-### English
-able to withstand or recover quickly from difficult conditions
-
-## Example Sentences
-
-1. The economy proved resilient after the crisis.
-   *Ekonomi krizden sonra dirençli olduğunu kanıtladı.*
-2. Children are remarkably resilient.
-   *Çocuklar olağanüstü derecede dirençlidir.*
-3. _(your own sentence — add)_
-
-## Relations
-
-| Type | Words |
-|---|---|
-| Synonyms | tough, hardy, robust, durable |
-| Antonyms | fragile, weak, vulnerable |
-| Word family | resilience (n), resiliently (adv) |
-
-## Spaced Repetition
-
-#flashcards/english
-
-resilient::dirençli, çabuk toparlanan
+```
+Kelimeler/
+├── _Sözlük.md          ← A-Z navigasyon ana sayfa
+├── A/
+│   ├── adopted.md
+│   └── appreciate.md
+├── E/
+│   └── endeavor.md
+├── R/
+│   └── resilient.md
+└── V/
+    └── validation.md
 ```
 
-## How it works
+`_Sözlük.md` dosyasını Obsidian'da açtığında üstte **A B C D E ...** butonları görüyorsun, tıkladığında o harfin kelimelerine atlıyorsun. Liste **Dataview ile dinamik** — yeni kelime eklediğinde otomatik beliriyor, sıfır bakım.
 
-Three free APIs, in order:
+Mevcut bir vault'u sözlük yapısına çevirmek için tek seferlik:
+```bash
+python vault_alfabetik_organize.py --uygula
+```
 
-1. **[dictionaryapi.dev](https://dictionaryapi.dev)** — IPA, parts of speech, definitions, examples, synonyms/antonyms (built on Wiktionary)
-2. **[MyMemory Translation](https://mymemory.translated.net)** — Turkish translation of the word and example sentences
-3. **[Tatoeba.org](https://tatoeba.org)** — fallback for example sentences when dictionary has none. Bonus: returns sentences with their human-translated Turkish counterparts.
+## Hızlı başlangıç
 
-No API keys. No `pip install`. Just Python 3.8+ and an internet connection.
-
-## Quick start
-
-### 1. Clone or download
+### 1. İndir
 
 ```bash
 git clone https://github.com/Muhammet-Ay/ingilizce-kelimeler.git
 cd ingilizce-kelimeler
 ```
 
-Or open the folder as an Obsidian vault directly.
+Veya bu klasörü doğrudan Obsidian'da vault olarak aç.
 
-### 2. Add a word
+### 2. Kelime ekle
 
 ```bash
 cd "Araçlar"
 python kelime_ekle.py resilient
 ```
 
-That's it. Open Obsidian, look in `Kelimeler/` — your card is there.
+Bu kadar. Obsidian'ı aç, `Kelimeler/R/` klasöründe kart hazır.
 
-### 3. More options
+### 3. Daha fazla seçenek
 
 ```bash
-# Multiple words at once
+# Birden fazla kelime
 python kelime_ekle.py endeavor ubiquitous meticulous
 
-# From a list (edit yeni_kelimeler.txt — one word per line)
+# Liste dosyasından (yeni_kelimeler.txt'ye satır satır yaz)
 python kelime_ekle.py
 
-# Different difficulty level
+# Farklı seviye
 python kelime_ekle.py validation --seviye advanced
 
-# Re-fetch an existing word
+# Var olan kelimeyi yenile
 python kelime_ekle.py guidance --overwrite
 
-# Skip Turkish translation (English data only)
+# Türkçe çeviriyi atla
 python kelime_ekle.py paradigm --no-translate
 ```
 
-## Companion tools
+## Diğer araçlar
 
-This repo also ships with:
+Bu repo şunları da içeriyor:
 
-- **`toplu_ekleme.py`** — bulk-add from a CSV when you already have meanings written.
-- **`eklentileri_kur.ps1` / `.bat`** — one-click installer for 8 useful Obsidian community plugins (Dataview, Templater, Translate, Calendar, Periodic Notes, Excalidraw, Various Complements, Obsidian to Anki). Windows only. Downloads from each plugin's official GitHub release.
-- **Obsidian templates** — `Templates/Şablon - Basit/Orta/Detaylı.md` for three difficulty levels.
-- **Spaced Repetition compatibility** — every generated card has `#flashcards/english` and `::` separators, ready for the [obsidian-spaced-repetition](https://github.com/st3v3nmw/obsidian-spaced-repetition) plugin.
+- **`vault_alfabetik_organize.py`** — vault'u A-Z sözlük yapısına dönüştürür + `_Sözlük.md` üretir
+- **`toplu_ekleme.py`** — anlamı zaten yazılı bir CSV'den toplu ekleme
+- **`vault_temizle.py`** — yanlışlıkla eklenmiş "of, may, into" gibi anlamsız notları işaretler ve onaylarsan siler
+- **`eklentileri_kur.ps1` / `.bat`** — 8 faydalı Obsidian community eklentisini tek tıkla kuran script (Dataview, Templater, Translate, Calendar, Periodic Notes, Excalidraw, Various Complements, Obsidian to Anki). Sadece Windows. Her eklentiyi resmi GitHub release'inden indirir.
+- **Obsidian şablonları** — `Templates/Şablon - Basit/Orta/Detaylı.md` üç farklı seviye için
+- **Spaced Repetition uyumlu** — her kart `#flashcards/english` etiketi ve `::` ayraçlarıyla geliyor; [obsidian-spaced-repetition](https://github.com/st3v3nmw/obsidian-spaced-repetition) eklentisi otomatik tanır
 
-## Customizing for other languages
+## Başka diller için
 
-The script targets Turkish translations by default. To change that, edit two lines at the top of `Araçlar/kelime_ekle.py`:
+Script varsayılan olarak Türkçe çeviri yapıyor. Başka bir dile çevirmek için `Araçlar/kelime_ekle.py` içindeki şu iki satırı değiştir:
 
 ```python
 TRANSLATE_API = "https://api.mymemory.translated.net/get?q={q}&langpair=en|tr"
 TATOEBA_API = "https://tatoeba.org/en/api_v0/search?from=eng&to=tur&query={q}&sort=relevance"
 ```
 
-Change `tr` to `es` (Spanish), `de` (German), `fr` (French), or any [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes). Tatoeba uses the [639-3 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-3_codes) — `tur`, `spa`, `deu`, `fra`.
+`tr` yerine `es` (İspanyolca), `de` (Almanca), `fr` (Fransızca) yaz. Tatoeba 3-harfli kod istiyor — `tur` yerine `spa`, `deu`, `fra` gibi.
 
-The markdown template (Turkish labels like "Telaffuz", "Anlam") lives in the `render_md` function in the same file.
+Markdown şablonundaki Türkçe etiketler (Telaffuz, Anlam, vs.) `render_md` fonksiyonunda — orayı da çevirmen lazım.
 
-## Project layout
+## Klasör yapısı
 
 ```
 .
-├── README.md                      # this file
-├── README.tr.md                   # Turkish version
+├── README.md                      # bu dosya (Türkçe)
+├── README.en.md                   # İngilizce versiyon
 ├── LICENSE                        # MIT
 ├── Templates/
-│   ├── Şablon - Basit.md          # beginner template
-│   ├── Şablon - Orta.md           # intermediate (default)
-│   └── Şablon - Detaylı.md        # advanced
+│   ├── Şablon - Basit.md          # başlangıç şablonu
+│   ├── Şablon - Orta.md           # orta (varsayılan)
+│   └── Şablon - Detaylı.md        # ileri
 ├── Araçlar/
-│   ├── kelime_ekle.py             # ⭐ main auto-fetch script
-│   ├── toplu_ekleme.py            # CSV bulk import
-│   ├── yeni_kelimeler.txt         # word list (one per line)
-│   ├── eklentileri_kur.ps1        # plugin installer
-│   ├── eklentileri_kur.bat        # double-click wrapper
-│   └── README - Toplu Ekleme.md   # tool docs (Turkish)
+│   ├── kelime_ekle.py             # ⭐ ana otomatik script
+│   ├── vault_alfabetik_organize.py  # sözlük yapısına dönüştürücü
+│   ├── toplu_ekleme.py            # CSV toplu ekleme
+│   ├── vault_temizle.py           # junk note temizleyici
+│   ├── yeni_kelimeler.txt         # kelime listesi (satır satır)
+│   ├── eklentileri_kur.ps1        # eklenti kurucu
+│   ├── eklentileri_kur.bat        # çift tıklayıp çalıştır
+│   └── README - Toplu Ekleme.md   # araç rehberi
 ├── Kelimeler/
-│   ├── resilient.md               # example output
-│   ├── endeavor.md
-│   └── ubiquitous.md
+│   ├── _Sözlük.md                 # A-Z ana sayfa
+│   ├── E/endeavor.md              # örnek çıktılar
+│   ├── R/resilient.md
+│   └── U/ubiquitous.md
 └── docs/
-    ├── RECORDING.md               # how to record a demo GIF
-    └── LINKEDIN_POST.md           # social media post drafts
+    ├── RECORDING.md               # demo GIF nasıl kaydedilir
+    └── LINKEDIN_POST.md           # paylaşım taslakları
 ```
 
-## Limitations
+## Sınırlar
 
-- **Internet required.** No offline mode yet. Could be added by bundling a Wiktionary dump.
-- **MyMemory daily quota.** ~5,000 words/day. Plenty for personal use; if exceeded, translations come back empty until midnight UTC. Examples from Tatoeba still work.
-- **dictionaryapi.dev coverage gaps.** Common technical words sometimes return 404. The script reports it and you can add the entry manually.
-- **Windows-first install script.** `eklentileri_kur.ps1` is PowerShell. Mac/Linux users should install Obsidian plugins through the in-app store.
+- **İnternet gerekli.** Şu an offline modu yok. Wiktionary dump'ı entegre edilebilir, henüz değil.
+- **MyMemory günlük kotası.** ~5000 kelime/gün. Kişisel kullanımda asla aşmazsın; aşarsan çeviriler boş döner, gece yarısı UTC sıfırlanır.
+- **dictionaryapi.dev kapsam boşlukları.** Bazı teknik kelimeler 404 dönebiliyor. Script "bulunamadı" der, elden ekleyebilirsin.
+- **Eklenti kurucu Windows'a özel.** `eklentileri_kur.ps1` PowerShell. Mac/Linux kullanıcısı eklentileri Obsidian içinden Settings → Community Plugins'ten kurar.
+- **`_Sözlük.md` Dataview gerektirir.** Yoksa A-Z navigasyon görünür ama listeler boş olur. `eklentileri_kur.ps1` Dataview'ı zaten kuruyor.
 
-## Contributing
+## Katkıda bulunma
 
-PRs welcome. If you adapt this for another language pair (Spanish learners, German learners, etc.), I'll gladly link to your fork from this README. See [CONTRIBUTING.md](CONTRIBUTING.md) for the small-print.
+PR'lar açık. Başka bir dil çifti için (İspanyolca öğrenenler, Almanca öğrenenler...) fork açıp adapte ederseniz README'den linkleyeyim memnuniyetle. Ayrıntı [CONTRIBUTING.md](CONTRIBUTING.md) içinde.
 
-## License
+## Lisans
 
-MIT — do what you want, just keep the copyright notice.
+MIT — istediğini yap, sadece copyright satırını koru.
 
-## Acknowledgments
+## Teşekkürler
 
-- [dictionaryapi.dev](https://dictionaryapi.dev) — free dictionary built on Wiktionary
-- [MyMemory](https://mymemory.translated.net) — translation memory by Translated.net
-- [Tatoeba](https://tatoeba.org) — community-built corpus of translated sentences
-- [Obsidian](https://obsidian.md) — the knowledge base this all plugs into
+- [dictionaryapi.dev](https://dictionaryapi.dev) — Wiktionary tabanlı ücretsiz sözlük API'si
+- [MyMemory](https://mymemory.translated.net) — Translated.net'in çeviri belleği
+- [Tatoeba](https://tatoeba.org) — topluluk-yapımı çift dilli cümle veritabanı
+- [Obsidian](https://obsidian.md) — bütün bunların oturduğu bilgi tabanı
 
-Built by [Muhammet Ay](https://github.com/Muhammet-Ay) while learning English the hard way.
+Yapan: [Muhammet Ay](https://github.com/Muhammet-Ay) — İngilizce'yi zor yoldan öğrenirken.

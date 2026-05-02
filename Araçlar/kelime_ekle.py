@@ -345,13 +345,20 @@ def process_word(word: str, out_dir: Path, today: str, level: str,
             print(f"    [—] Tatoeba'da uygun cümle bulunamadı")
 
     md = render_md(word, info, today, level)
-    fpath = out_dir / (slugify(word) + ".md")
+
+    # Sözlük gibi alfabetik klasörlere yaz: Kelimeler/V/validation.md
+    slug = slugify(word)
+    first = slug[0].upper() if slug and slug[0].isalpha() else "_diger"
+    letter_dir = out_dir / first
+    letter_dir.mkdir(parents=True, exist_ok=True)
+    fpath = letter_dir / (slug + ".md")
+
     if fpath.exists() and not overwrite:
-        print(f"  [atla] {fpath.name} zaten var (--overwrite ile yaz)")
+        print(f"  [atla] {first}/{fpath.name} zaten var (--overwrite ile yaz)")
         return "skip"
 
     fpath.write_text(md, encoding="utf-8")
-    print(f"  [+] {fpath.name}  (tür: {info.get('tur') or '—'})")
+    print(f"  [+] {first}/{fpath.name}  (tür: {info.get('tur') or '—'})")
     return "ok"
 
 
