@@ -71,13 +71,19 @@ python vault_alfabetik_organize.py --uygula
 
 ## 🐳 Docker (no Python install required)
 
-```bash
-# Build once (~30 seconds)
-docker build -t ingilizce-kelimeler .
+**Easiest — pull directly from Docker Hub (no build step):**
 
-# Run
+```bash
+docker run --rm -v "$(pwd)/Kelimeler:/app/Kelimeler" mami32/ingilizce-kelimeler resilient
+```
+
+First run pulls the image (~50 MB), subsequent runs are instant.
+
+**Or build locally:**
+
+```bash
+docker build -t ingilizce-kelimeler .
 docker compose run --rm kelime resilient
-docker compose run --rm kelime endeavor ubiquitous --seviye advanced
 ```
 
 Output appears at `Kelimeler/R/resilient.md` on your host machine. Full guide: [docs/DOCKER.md](docs/DOCKER.md).

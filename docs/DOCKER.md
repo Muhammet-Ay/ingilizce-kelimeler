@@ -136,17 +136,17 @@ Eğer başkalarının image'ı build etmesini bile istemezsen, Docker Hub'a push
 docker login
 
 # Image'ı tagle
-docker tag ingilizce-kelimeler muhammetay/ingilizce-kelimeler:latest
+docker tag ingilizce-kelimeler mami32/ingilizce-kelimeler:latest
 
 # Push
-docker push muhammetay/ingilizce-kelimeler:latest
+docker push mami32/ingilizce-kelimeler:latest
 ```
 
 Sonra dünyanın herhangi bir yerinden:
 
 ```bash
 docker run --rm -v "$(pwd)/Kelimeler:/app/Kelimeler" \
-  muhammetay/ingilizce-kelimeler resilient
+  mami32/ingilizce-kelimeler resilient
 ```
 
 Build adımı yok, doğrudan pull + run.

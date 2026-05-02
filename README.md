@@ -67,13 +67,19 @@ python vault_alfabetik_organize.py --uygula
 
 ## 🐳 Docker ile (Python yüklemek istemeyenler için)
 
-```bash
-# Build (tek seferlik, ~30 saniye)
-docker build -t ingilizce-kelimeler .
+**En kolay yol — Docker Hub'dan direkt çek (build adımı yok):**
 
-# Çalıştır
+```bash
+docker run --rm -v "$(pwd)/Kelimeler:/app/Kelimeler" mami32/ingilizce-kelimeler resilient
+```
+
+İlk seferde image otomatik iner (~50 MB), sonrası anında çalışır.
+
+**Veya yerel build:**
+
+```bash
+docker build -t ingilizce-kelimeler .
 docker compose run --rm kelime resilient
-docker compose run --rm kelime endeavor ubiquitous --seviye advanced
 ```
 
 Çıktı `Kelimeler/R/resilient.md` olarak host makinende görünür. Detaylı kullanım: [docs/DOCKER.md](docs/DOCKER.md).
