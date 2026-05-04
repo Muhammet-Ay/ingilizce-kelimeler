@@ -18,4 +18,4 @@ category:
 #flashcards/english
 
 {{KELIME}}::{{ANLAM}}
-<!--SR:!2026-05-02,3,250-->
+<!--SR:!2026-05-12,8,250-->
